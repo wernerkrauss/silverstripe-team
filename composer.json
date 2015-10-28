@@ -1,0 +1,32 @@
+{
+	"name": "wernerkrauss/silverstripe-team",
+	"description": "TeamHolder page with optional SinglePageAdmin",
+	"type": "silverstripe-module",
+	"keywords": [
+		"silverstripe",
+		"extension"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Werner Krauß",
+			"email": "werner.krauss@netwerkstatt.at",
+			"homepage": "http://www.netwerkstatt.at",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/wernerkrauss/silverstripe-team/issues"
+	},
+	"require": {
+		"silverstripe/framework": "^3.2.0",
+		"silverstripe/cms": "^3.2.0",
+		"nightjar/ss-slug": "*"
+	},
+	"suggest": {
+		"littlegiant/silverstripe-singlepageadmin": "A ModelAdmin for managing a single TeamHolderPage"
+	},
+	"extra": {
+		"installer-name": "team"
+	}
+}

@@ -1,0 +1,31 @@
+de:
+  TeamAdmin:
+    MENUTITLE: Mitarbeiter
+  Permissions:
+    TEAM_CATEGORY: Mitarbeiter
+  Team:
+    PERMISSION_CREATE_DESCRIPTION: 'Mitarbeiter erstellen'
+    PERMISSION_MANAGE_DESCRIPTION: 'Mitarbeiter erstellen, bearbeiten und löschen'
+    TeamFieldTitle: Team
+  TeamHolder:
+    DESCRIPTION: 'Mitarbeiter Seite'
+    PLURALNAME: 'Mitarbeiter Seiten'
+    SINGULARNAME: 'Mitarbeiter Seite'
+    TeamTabName: Mitarbeiter
+    has_many_TeamMembers: Mitarbeiter
+  TeamMember:
+    PLURALNAME: Mitarbeiter
+    SINGULARNAME: Mitarbeiter
+    db_DegreeBack: 'Akad. Titel nachgestell'
+    db_DegreeFront: 'Akad. Titel tvorgestellt'
+    db_Description: Beschreibung
+    db_Email: E-Mail
+    db_FirstName: Vorname
+    db_IsActive: Aktiv
+    __db_Position: Position
+    db_SortOrder: Sortierung
+    db_Surname: Nachname
+    __db_Tel: Tel
+    __db_URLSlug: URLSlug
+    __has_one_Portrait: Portrait
+    has_one_TeamHolder: 'Team Seite'

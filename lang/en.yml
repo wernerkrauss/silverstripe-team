@@ -1,0 +1,31 @@
+en:
+  TeamAdmin:
+    __MENUTITLE: Team
+  Permissions:
+    __TEAM_CATEGORY: Teams
+  Team:
+    __PERMISSION_CREATE_DESCRIPTION: 'Create Teams'
+    __PERMISSION_MANAGE_DESCRIPTION: 'Create, edit and delete Teams'
+    __TeamFieldTitle: Team
+  TeamHolder:
+    __DESCRIPTION: 'Generic content page'
+    PLURALNAME: s
+    SINGULARNAME: 'Team Holder'
+    __TeamTabName: Team
+    __has_many_TeamMembers: 'Team Members'
+  TeamMember:
+    __PLURALNAME: Employees
+    __SINGULARNAME: Employee
+    __db_DegreeBack: 'Degree Back'
+    __db_DegreeFront: 'Degree Front'
+    __db_Description: Description
+    __db_Email: Email
+    __db_FirstName: 'First Name'
+    __db_IsActive: 'Is Active'
+    __db_Position: Position
+    __db_SortOrder: 'Sort Order'
+    __db_Surname: Surname
+    __db_Tel: Tel
+    __db_URLSlug: URLSlug
+    __has_one_Portrait: Portrait
+    __has_one_TeamHolder: 'Team Holder'
