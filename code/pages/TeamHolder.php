@@ -29,9 +29,8 @@ class TeamHolder extends Page {
 
     private static $plural_name = 'Team Holder Pages';
 
-    private static $summary_fields = array();
+	private static $icon = 'team/images/users.png';
 
-    private static $searchable_fields = array();
 
     public function getCMSFields() {
         $self =& $this;
