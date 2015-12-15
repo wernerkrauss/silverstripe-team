@@ -16,8 +16,8 @@ de:
   TeamMember:
     PLURALNAME: Mitarbeiter
     SINGULARNAME: Mitarbeiter
-    db_DegreeBack: 'Akad. Titel nachgestell'
-    db_DegreeFront: 'Akad. Titel tvorgestellt'
+    db_DegreeBack: 'Akad. Titel nachgestellt'
+    db_DegreeFront: 'Akad. Titel vorgestellt'
     db_Description: Beschreibung
     db_Email: E-Mail
     db_FirstName: Vorname
