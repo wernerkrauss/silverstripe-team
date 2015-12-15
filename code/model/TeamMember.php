@@ -34,10 +34,10 @@ class TeamMember extends DataObject implements PermissionProvider {
 	);
 
 	private static $db = array(
-		'DegreeFront' => 'Varchar(12)',
+		'DegreeFront' => 'Varchar(64)',
 		'FirstName' => 'Varchar(255)',
 		'Surname' => 'Varchar(255)',
-		'DegreeBack' => 'Varchar(12)',
+		'DegreeBack' => 'Varchar(64)',
 		'Position' => 'Varchar',
 		'Description' => 'Text',
 		'Tel' => 'Varchar(255)',
@@ -75,7 +75,8 @@ class TeamMember extends DataObject implements PermissionProvider {
 	 */
 	private static $translate = [
 		'Position',
-		'Description'
+		'Description',
+		'DegreeFront'
 	];
 
 	public function getCMSFields() {
