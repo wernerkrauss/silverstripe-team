@@ -27,190 +27,200 @@
  * @mixin Slug("Title", null, true)
  * EndGeneratedWithDataObjectAnnotator
  */
-class TeamMember extends DataObject implements PermissionProvider {
+class TeamMember extends DataObject implements PermissionProvider
+{
 
-	private static $extensions = array(
-		'Slug("Title", null, true)', //adds URLSlug field and some logic
-	);
+    private static $extensions = array(
+        'Slug("Title", null, true)', //adds URLSlug field and some logic
+    );
 
-	private static $db = array(
-		'DegreeFront' => 'Varchar(64)',
-		'FirstName' => 'Varchar(255)',
-		'Surname' => 'Varchar(255)',
-		'DegreeBack' => 'Varchar(64)',
-		'Position' => 'Varchar',
-		'Description' => 'Text',
-		'Tel' => 'Varchar(255)',
-		'Email' => 'Varchar(255)',
-		'IsActive' => 'Boolean',
-		'SortOrder' => 'Int'
-	);
+    private static $db = array(
+        'DegreeFront' => 'Varchar(64)',
+        'FirstName' => 'Varchar(255)',
+        'Surname' => 'Varchar(255)',
+        'DegreeBack' => 'Varchar(64)',
+        'Position' => 'Varchar',
+        'Description' => 'Text',
+        'Tel' => 'Varchar(255)',
+        'Email' => 'Varchar(255)',
+        'IsActive' => 'Boolean',
+        'SortOrder' => 'Int'
+    );
 
-	private static $has_one = array(
-		'TeamHolder' => 'TeamHolder',
-		'Portrait' => 'Image',
-	);
+    private static $has_one = array(
+        'TeamHolder' => 'TeamHolder',
+        'Portrait' => 'Image',
+    );
 
-	private static $singular_name = 'Employee';
+    private static $singular_name = 'Employee';
 
-	private static $plural_name = 'Employees';
+    private static $plural_name = 'Employees';
 
-	private static $summary_fields = array(
-		'Surname' => 'Nachname',
-		'FirstName' => 'Vorname');
+    private static $summary_fields = array(
+        'Surname' => 'Nachname',
+        'FirstName' => 'Vorname');
 
-	private static $searchable_fields = array('Surname', 'Description');
+    private static $searchable_fields = array('Surname', 'Description');
 
-	private static $upload_path = 'team';
+    private static $upload_path = 'team';
 
-	private static $dummy_image = 'dummy.jpg';
+    private static $dummy_image = 'dummy.jpg';
 
-	private static $default_dummy = 'mysite/images/dummy.jpg';
+    private static $default_dummy = 'mysite/images/dummy.jpg';
 
-	private static $default_sort = 'SortOrder';
+    private static $default_sort = 'SortOrder';
 
-	/**
-	 * for configuring fluent
-	 * @var array
-	 */
-	private static $translate = [
-		'Position',
-		'Description',
-		'DegreeFront'
-	];
+    /**
+     * for configuring fluent
+     * @var array
+     */
+    private static $translate = [
+        'Position',
+        'Description',
+        'DegreeFront'
+    ];
 
-	public function getCMSFields() {
-		$fields = parent::getCMSFields();
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
 
-		$fields->removeByName(['SortOrder', 'TeamHolderID']);
+        $fields->removeByName(['SortOrder', 'TeamHolderID']);
 
-		$fields->dataFieldByName('Portrait')->setFolderName($this->stat('upload_path'));
+        $fields->dataFieldByName('Portrait')->setFolderName($this->stat('upload_path'));
 
-		$this->extend('updateCMSFields', $fields);
+        $this->extend('updateCMSFields', $fields);
 
-		return $fields;
-	}
+        return $fields;
+    }
 
-	public function getTitle() {
-		return $this->Surname . ' ' . $this->FirstName;
-	}
+    public function getTitle()
+    {
+        return $this->Surname . ' ' . $this->FirstName;
+    }
 
-	/**
-	 * Helper function to display the full name with degrees
-	 * @return string
-	 */
-	public function getName() {
-		$name = join(' ', array_filter([$this->DegreeFront, $this->FirstName, $this->Surname]));
+    /**
+     * Helper function to display the full name with degrees
+     * @return string
+     */
+    public function getName()
+    {
+        $name = join(' ', array_filter([$this->DegreeFront, $this->FirstName, $this->Surname]));
 
-		return join(', ', array_filter([$name, $this->DegreeBack]));
-	}
+        return join(', ', array_filter([$name, $this->DegreeBack]));
+    }
 
-	public function getPortraitPhoto() {
-		return $this->PortraitID ? $this->Portrait() : $this->getDummyPortrait();
-	}
+    public function getPortraitPhoto()
+    {
+        return $this->PortraitID ? $this->Portrait() : $this->getDummyPortrait();
+    }
 
 
-	public function getDummyPortrait() {
-		$dummyName = $this->stat('dummy_image');
-		$uploadPath = $this->stat('upload_path');
+    public function getDummyPortrait()
+    {
+        $dummyName = $this->stat('dummy_image');
+        $uploadPath = $this->stat('upload_path');
 
-		$uploadFolder = Folder::find_or_make($uploadPath);
+        $uploadFolder = Folder::find_or_make($uploadPath);
 
-		$dummyPic = Image::find(join('/', [$uploadPath, $dummyName]));
+        $dummyPic = Image::find(join('/', [$uploadPath, $dummyName]));
 
-		if (!$dummyPic) {
-			//create it
-			$defaultDummy = join('/', [BASE_PATH, $this->stat('default_dummy')]);
-			$assetsDummy = join('/', [BASE_PATH, 'assets', $uploadPath, $dummyName]);
+        if (!$dummyPic) {
+            //create it
+            $defaultDummy = join('/', [BASE_PATH, $this->stat('default_dummy')]);
+            $assetsDummy = join('/', [BASE_PATH, 'assets', $uploadPath, $dummyName]);
 
-			if (copy($defaultDummy, $assetsDummy)) {
-				$dummyPic = Image::create();
-				$dummyPic->setFilename(join('/', [$uploadFolder->getRelativePath(), $dummyName]));
-				$dummyPic->ParentID = $uploadFolder->ID;
-				$dummyPic->write();
-			}
-		}
+            if (copy($defaultDummy, $assetsDummy)) {
+                $dummyPic = Image::create();
+                $dummyPic->setFilename(join('/', [$uploadFolder->getRelativePath(), $dummyName]));
+                $dummyPic->ParentID = $uploadFolder->ID;
+                $dummyPic->write();
+            }
+        }
 
-		return $dummyPic;
-	}
+        return $dummyPic;
+    }
 
-	/**
-	 * @param null $member
-	 * @return bool
-	 */
-	public function canView($member = null) {
-		return true;
-	}
+    /**
+     * @param null $member
+     * @return bool
+     */
+    public function canView($member = null)
+    {
+        return true;
+    }
 
-	/**
-	 * @param null $member
-	 * @return bool
-	 */
-	public function canCreate($member = null) {
-		$parent = parent::canCreate($member);
+    /**
+     * @param null $member
+     * @return bool
+     */
+    public function canCreate($member = null)
+    {
+        $parent = parent::canCreate($member);
 
-		$manage = Permission::check('TEAM_MANAGE', 'any', $member);
-		$create = Permission::check('TEAM_CREATE', 'any', $member);
+        $manage = Permission::check('TEAM_MANAGE', 'any', $member);
+        $create = Permission::check('TEAM_CREATE', 'any', $member);
 
-		return $parent || $manage || $create;
-	}
+        return $parent || $manage || $create;
+    }
 
-	/**
-	 * @param null $member
-	 * @return bool
-	 */
-	public function canEdit($member = null) {
-		$member = $member ?: Member::currentUser();
-		$parent = parent::canCreate($member);
+    /**
+     * @param null $member
+     * @return bool
+     */
+    public function canEdit($member = null)
+    {
+        $member = $member ?: Member::currentUser();
+        $parent = parent::canCreate($member);
 
-		$manage = Permission::check('TEAM_MANAGE', 'any', $member);
-		$owner  = $member ? $this->OwnerID == $member->ID : false;
+        $manage = Permission::check('TEAM_MANAGE', 'any', $member);
+        $owner  = $member ? $this->OwnerID == $member->ID : false;
 
-		return $parent || $manage || $owner;
-	}
+        return $parent || $manage || $owner;
+    }
 
-	/**
-	 * @param null $member
-	 * @return bool
-	 */
-	public function canDelete($member = null) {
-		$parent = parent::canCreate($member);
+    /**
+     * @param null $member
+     * @return bool
+     */
+    public function canDelete($member = null)
+    {
+        $parent = parent::canCreate($member);
 
-		$manage = Permission::check('TEAM_MANAGE', 'any', $member);
+        $manage = Permission::check('TEAM_MANAGE', 'any', $member);
 
-		return $parent || $manage;
+        return $parent || $manage;
+    }
 
-	}
+    /**
+     * Return a map of permission codes to add to the dropdown shown in the Security section of the CMS.
+     * array(
+     *   'VIEW_SITE' => 'View the site',
+     * );
+     */
+    public function providePermissions()
+    {
+        return [
+            'TEAM_MANAGE' => [
+                'name'     => _t('Team.PERMISSION_MANAGE_DESCRIPTION', 'Create, edit and delete Teams'),
+                'category' => _t('Permissions.TEAM_CATEGORY', 'Teams'),
+            ],
+            'TEAM_CREATE' => [
+                'name'     => _t('Team.PERMISSION_CREATE_DESCRIPTION', 'Create Teams'),
+                'category' => _t('Permissions.TEAM_CATEGORY', 'Teams'),
+            ]
+        ];
+    }
 
-	/**
-	 * Return a map of permission codes to add to the dropdown shown in the Security section of the CMS.
-	 * array(
-	 *   'VIEW_SITE' => 'View the site',
-	 * );
-	 */
-	public function providePermissions() {
-		return [
-			'TEAM_MANAGE' => [
-				'name'     => _t('Team.PERMISSION_MANAGE_DESCRIPTION', 'Create, edit and delete Teams'),
-				'category' => _t('Permissions.TEAM_CATEGORY', 'Teams'),
-			],
-			'TEAM_CREATE' => [
-				'name'     => _t('Team.PERMISSION_CREATE_DESCRIPTION', 'Create Teams'),
-				'category' => _t('Permissions.TEAM_CATEGORY', 'Teams'),
-			]
-		];
-	}
+    /**
+     * Link to this DO
+     * @return string
+     */
+    public function Link()
+    {
+        $link = $this->TeamHolderID ? $this->TeamHolder()->Link() : '';
 
-	/**
-	 * Link to this DO
-	 * @return string
-	 */
-	public function Link() {
-		$link = $this->TeamHolderID ? $this->TeamHolder()->Link() : '';
+        $this->extend('UpdateLink', $link);
 
-		$this->extend('UpdateLink', $link);
-
-		return $link;
-	}
-
+        return $link;
+    }
 }

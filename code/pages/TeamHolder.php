@@ -11,9 +11,10 @@
  * @method DataList|TeamMember[] TeamMembers
  * EndGeneratedWithDataObjectAnnotator
  */
-class TeamHolder extends Page {
+class TeamHolder extends Page
+{
 
-	private static $db = array();
+    private static $db = array();
 
     private static $has_one = array();
 
@@ -29,10 +30,11 @@ class TeamHolder extends Page {
 
     private static $plural_name = 'Team Holder Pages';
 
-	private static $icon = 'team/images/users.png';
+    private static $icon = 'team/images/users.png';
 
 
-    public function getCMSFields() {
+    public function getCMSFields()
+    {
         $self =& $this;
         $this->beforeUpdateCMSFields(function (FieldList $fields) use ($self) {
 
@@ -60,70 +62,74 @@ class TeamHolder extends Page {
     }
 }
 
-class TeamHolder_Controller extends Page_Controller {
-	private static $item_class = 'TeamMember';
+class TeamHolder_Controller extends Page_Controller
+{
+    private static $item_class = 'TeamMember';
 
-	private static $url_handlers = array(
-		'$Item!' => 'show',
-	);
+    private static $url_handlers = array(
+        '$Item!' => 'show',
+    );
 
-	private static $allowed_actions = array(
-		'show'
-	);
+    private static $allowed_actions = array(
+        'show'
+    );
 
-	private static $page_length = 10;
+    private static $page_length = 10;
 
-	public function index() {
-		return $this;
-	}
+    public function index()
+    {
+        return $this;
+    }
 
-	/**
-	 * action for showing a single news item
-	 */
-	public function show() {
+    /**
+     * action for showing a single news item
+     */
+    public function show()
+    {
+        $templates = SSViewer::get_templates_by_class(__CLASS__, '_show');
+        $templates[] = 'Page';
 
-		$templates = SSViewer::get_templates_by_class(__CLASS__, '_show');
-		$templates[] = 'Page';
+        //use this if you need e.g. different template for ajax
+        $this->extend('updateTemplatesForShowAction', $templates);
 
-		//use this if you need e.g. different template for ajax
-		$this->extend('updateTemplatesForShowAction', $templates);
+        return $this->renderWith($templates);
+    }
 
-		return $this->renderWith($templates);
-	}
+    /**
+     * Returns all events unfiltered.
+     * @return DataList
+     */
+    public function getItems()
+    {
+        $itemClass = $this->stat('item_class');
 
-	/**
-	 * Returns all events unfiltered.
-	 * @return DataList
-	 */
-	public function getItems() {
-		$itemClass = $this->stat('item_class');
+        $items = $itemClass::get();
 
-		$items = $itemClass::get();
+        //move it to an extension?
+        if (Versioned::current_stage() === 'Live') {
+            $items = $items->filter('IsActive', 1);
+        }
 
-		//move it to an extension?
-		if(Versioned::current_stage() === 'Live') {
-			$items = $items->filter('IsActive', 1);
-		}
+        $this->extend('updateGetItems', $items);
 
-		$this->extend('updateGetItems', $items);
+        return $items;
+    }
 
-		return $items;
-	}
+    /**
+     * @param string $type future, all, past
+     * @return PaginatedList
+     */
+    public function getPaginatedItems()
+    {
+        $items = $this->getItems();
+        $paginatedList = new PaginatedList($items, $this->request);
+        $paginatedList->setPageLength($this->stat('page_length'));
+        $paginatedList->setLimitItems(true);
+        return $paginatedList;
+    }
 
-	/**
-	 * @param string $type future, all, past
-	 * @return PaginatedList
-	 */
-	public function getPaginatedItems() {
-		$items = $this->getItems();
-		$paginatedList = new PaginatedList($items, $this->request);
-		$paginatedList->setPageLength($this->stat('page_length'));
-		$paginatedList->setLimitItems(true);
-		return $paginatedList;
-	}
-
-	public function getItem() {
-		return $this->getItems()->filter(['URLSlug' => $this->request->param('Item')])->first();
-	}
-
+    public function getItem()
+    {
+        return $this->getItems()->filter(['URLSlug' => $this->request->param('Item')])->first();
+    }
 }

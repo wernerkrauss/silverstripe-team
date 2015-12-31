@@ -7,14 +7,15 @@
  * Time: 15:21
  */
 if (class_exists('SinglePageAdmin')) {
-	class TeamAdmin extends SinglePageAdmin {
+    class TeamAdmin extends SinglePageAdmin
+    {
 
-		private static $menu_title = 'Team';
+        private static $menu_title = 'Team';
 
-		private static $tree_class = 'TeamHolder';
+        private static $tree_class = 'TeamHolder';
 
-		private static $url_segment = 'team';
+        private static $url_segment = 'team';
 
-		private static $menu_icon = 'team/images/users.png';
-	}
+        private static $menu_icon = 'team/images/users.png';
+    }
 }
