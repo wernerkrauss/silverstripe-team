@@ -1,7 +1,7 @@
 {
 	"name": "wernerkrauss/silverstripe-team",
 	"description": "TeamHolder page with optional SinglePageAdmin",
-	"type": "silverstripe-module",
+	"type": "silverstripe-vendormodule",
 	"keywords": [
 		"silverstripe",
 		"extension"
@@ -19,14 +19,22 @@
 		"issues": "https://github.com/wernerkrauss/silverstripe-team/issues"
 	},
 	"require": {
-		"silverstripe/framework": "^3.2.0",
-		"silverstripe/cms": "^3.2.0",
-		"nightjar/ss-slug": "*"
+		"silverstripe/recipe-cms": "^4",
+		"nightjar/ss-slug": "^2",
+        "undefinedoffset/sortablegridfield": "^2"
 	},
 	"suggest": {
 		"littlegiant/silverstripe-singlepageadmin": "A ModelAdmin for managing a single TeamHolderPage"
 	},
 	"extra": {
-		"installer-name": "team"
-	}
+		"installer-name": "team",
+        "expose": [
+            "images"
+        ]
+	},
+    "autoload": {
+        "psr-4": {
+            "Netwerkstatt\\Team\\": "src/"
+        }
+    }
 }

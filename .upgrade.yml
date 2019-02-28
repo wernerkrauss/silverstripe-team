@@ -1,0 +1,5 @@
+mappings:
+  TeamAdmin: Netwerkstatt\Team\Admin\TeamAdmin
+  TeamMember: Netwerkstatt\Team\Model\TeamMember
+  TeamHolder: Netwerkstatt\Team\Pages\TeamHolder
+  TeamHolder_Controller: Netwerkstatt\Team\Pages\TeamHolderController

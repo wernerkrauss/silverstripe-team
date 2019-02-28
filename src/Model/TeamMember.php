@@ -1,4 +1,18 @@
 <?php
+
+namespace Netwerkstatt\Team\Model;
+
+
+use Netwerkstatt\Team\Pages\TeamHolder;
+use Nightjar\Slug\Slug;
+use SilverStripe\Assets\Folder;
+use SilverStripe\Assets\Image;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Member;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\PermissionProvider;
+
+
 /**
  * Created by IntelliJ IDEA.
  * User: Werner M. Krauß <werner.krauss@netwerkstatt.at>
@@ -30,11 +44,11 @@
 class TeamMember extends DataObject implements PermissionProvider
 {
 
-    private static $extensions = array(
-        'Slug("Title", null, true)', //adds URLSlug field and some logic
-    );
+    private static $extensions = [
+        Slug::class . '("Title", null, true)', //adds URLSlug field and some logic
+    ];
 
-    private static $db = array(
+    private static $db = [
         'DegreeFront' => 'Varchar(64)',
         'FirstName' => 'Varchar(255)',
         'Surname' => 'Varchar(255)',
@@ -45,28 +59,31 @@ class TeamMember extends DataObject implements PermissionProvider
         'Email' => 'Varchar(255)',
         'IsActive' => 'Boolean',
         'SortOrder' => 'Int'
-    );
+    ];
 
-    private static $has_one = array(
-        'TeamHolder' => 'TeamHolder',
-        'Portrait' => 'Image',
-    );
+    private static $has_one = [
+        'TeamHolder' => TeamHolder::class,
+        'Portrait' => Image::class,
+    ];
+
+    private static $table_name = 'TeamMember';
 
     private static $singular_name = 'Employee';
 
     private static $plural_name = 'Employees';
 
-    private static $summary_fields = array(
+    private static $summary_fields = [
         'Surname' => 'Nachname',
-        'FirstName' => 'Vorname');
+        'FirstName' => 'Vorname'
+    ];
 
-    private static $searchable_fields = array('Surname', 'Description');
+    private static $searchable_fields = ['Surname', 'Description'];
 
     private static $upload_path = 'team';
 
     private static $dummy_image = 'dummy.jpg';
 
-    private static $default_dummy = 'mysite/images/dummy.jpg';
+    private static $default_dummy = 'wernerkrauss/silverstripe-team:images/dummy.jpg';
 
     private static $default_sort = 'SortOrder';
 
@@ -150,12 +167,11 @@ class TeamMember extends DataObject implements PermissionProvider
     }
 
     /**
-     * @param null $member
-     * @return bool
+     * @inheritdoc
      */
-    public function canCreate($member = null)
+    public function canCreate($member = null, $context = [])
     {
-        $parent = parent::canCreate($member);
+        $parent = parent::canCreate($member, $context);
 
         $manage = Permission::check('TEAM_MANAGE', 'any', $member);
         $create = Permission::check('TEAM_CREATE', 'any', $member);
@@ -173,7 +189,7 @@ class TeamMember extends DataObject implements PermissionProvider
         $parent = parent::canCreate($member);
 
         $manage = Permission::check('TEAM_MANAGE', 'any', $member);
-        $owner  = $member ? $this->OwnerID == $member->ID : false;
+        $owner = $member ? $this->OwnerID == $member->ID : false;
 
         return $parent || $manage || $owner;
     }
@@ -201,11 +217,11 @@ class TeamMember extends DataObject implements PermissionProvider
     {
         return [
             'TEAM_MANAGE' => [
-                'name'     => _t('Team.PERMISSION_MANAGE_DESCRIPTION', 'Create, edit and delete Teams'),
+                'name' => _t('Team.PERMISSION_MANAGE_DESCRIPTION', 'Create, edit and delete Teams'),
                 'category' => _t('Permissions.TEAM_CATEGORY', 'Teams'),
             ],
             'TEAM_CREATE' => [
-                'name'     => _t('Team.PERMISSION_CREATE_DESCRIPTION', 'Create Teams'),
+                'name' => _t('Team.PERMISSION_CREATE_DESCRIPTION', 'Create Teams'),
                 'category' => _t('Permissions.TEAM_CATEGORY', 'Teams'),
             ]
         ];
