@@ -67,7 +67,7 @@ class TeamHolderController extends PageController
         $items = $itemClass::get();
 
         //move it to an extension?
-        if (Versioned::current_stage() === 'Live') {
+        if (Versioned::get_stage() === 'Live') {
             $items = $items->filter('IsActive', 1);
         }
 

@@ -5,12 +5,13 @@ namespace Netwerkstatt\Team\Model;
 
 use Netwerkstatt\Team\Pages\TeamHolder;
 use Nightjar\Slug\Slug;
-use SilverStripe\Assets\Folder;
 use SilverStripe\Assets\Image;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Versioned\Versioned;
 
 
 /**
@@ -137,21 +138,24 @@ class TeamMember extends DataObject implements PermissionProvider
         $dummyName = $this->stat('dummy_image');
         $uploadPath = $this->stat('upload_path');
 
-        $uploadFolder = Folder::find_or_make($uploadPath);
-
         $dummyPic = Image::find(join('/', [$uploadPath, $dummyName]));
 
         if (!$dummyPic) {
-            //create it
-            $defaultDummy = join('/', [BASE_PATH, $this->stat('default_dummy')]);
-            $assetsDummy = join('/', [BASE_PATH, 'assets', $uploadPath, $dummyName]);
+            $dummyPath = ModuleResourceLoader::singleton()->resolvePath($this->stat('default_dummy'));
 
-            if (copy($defaultDummy, $assetsDummy)) {
+            //create it
+            $defaultDummy = join('/', [BASE_PATH, $dummyPath]);
+            $assetsDummy = join('/', [$uploadPath, $dummyName]);
+
+            $dummyPic = Versioned::withVersionedMode(function () use ($defaultDummy, $assetsDummy) {
                 $dummyPic = Image::create();
-                $dummyPic->setFilename(join('/', [$uploadFolder->getRelativePath(), $dummyName]));
-                $dummyPic->ParentID = $uploadFolder->ID;
+                $dummyPic->setFromLocalFile($defaultDummy, $assetsDummy);
                 $dummyPic->write();
-            }
+                $dummyPic->doPublish();
+
+                return $dummyPic;
+            });
+
         }
 
         return $dummyPic;
