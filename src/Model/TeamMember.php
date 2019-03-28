@@ -6,6 +6,7 @@ namespace Netwerkstatt\Team\Model;
 use Netwerkstatt\Team\Pages\TeamHolder;
 use Nightjar\Slug\Slug;
 use SilverStripe\Assets\Image;
+use SilverStripe\Control\Director;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
@@ -237,10 +238,20 @@ class TeamMember extends DataObject implements PermissionProvider
      */
     public function Link()
     {
-        $link = $this->TeamHolderID ? $this->TeamHolder()->Link() : '';
+        $link = $this->TeamHolderID ? $this->TeamHolder()->Link($this->URLSlug) : '';
 
         $this->extend('UpdateLink', $link);
 
         return $link;
+    }
+
+    /**
+     * The absolute URL of this DataObject. Needed for sitemap.xml
+     *
+     * @return string
+     */
+    public function AbsoluteLink()
+    {
+        return Director::absoluteURL($this->Link());
     }
 }
