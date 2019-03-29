@@ -12,7 +12,7 @@ use Netwerkstatt\Team\Pages\TeamHolder;
  * Date: 27.10.2015
  * Time: 15:21
  */
-//if (class_exists(SinglePageAdmin::class)) {
+if (class_exists(SinglePageAdmin::class)) {
     class TeamAdmin extends SinglePageAdmin
     {
 
@@ -24,4 +24,4 @@ use Netwerkstatt\Team\Pages\TeamHolder;
 
         private static $menu_icon_class = 'font-icon-torso';
     }
-//}
+}
