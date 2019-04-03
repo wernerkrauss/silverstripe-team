@@ -1,0 +1,9 @@
+---
+name: team-elemental
+Only:
+  moduleexists: "dnadesign/silverstripe-elemental"
+---
+
+Netwerkstatt\Team\Model\TeamMember:
+  belongs_many_many:
+    TeamBlocks: Netwerkstatt\Team\Block\Team
