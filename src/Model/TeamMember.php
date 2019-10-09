@@ -68,6 +68,10 @@ class TeamMember extends DataObject implements PermissionProvider
         'Portrait' => Image::class,
     ];
 
+    private static $owns = [
+        'Portrait'
+    ];
+
     private static $table_name = 'TeamMember';
 
     private static $singular_name = 'Employee';
