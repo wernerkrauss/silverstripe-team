@@ -51,7 +51,7 @@ class TeamHolderController extends PageController
     {
         $items = $this->getItems();
         $paginatedList = new PaginatedList($items, $this->request);
-        $paginatedList->setPageLength($this->stat('page_length'));
+        $paginatedList->setPageLength($this->config()->get('page_length'));
         $paginatedList->setLimitItems(true);
         return $paginatedList;
     }
@@ -62,7 +62,7 @@ class TeamHolderController extends PageController
      */
     public function getItems()
     {
-        $itemClass = $this->stat('item_class');
+        $itemClass = $this->config()->get('item_class');
 
         $items = $itemClass::get();
 

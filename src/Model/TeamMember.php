@@ -12,6 +12,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Security\Security;
 use SilverStripe\Versioned\Versioned;
 
 
@@ -109,8 +110,7 @@ class TeamMember extends DataObject implements PermissionProvider
 
         $fields->removeByName(['SortOrder', 'TeamHolderID']);
 
-        $fields->dataFieldByName('Portrait')->setFolderName($this->stat('upload_path'));
-
+        $fields->dataFieldByName('Portrait')->setFolderName($this->config()->get('upload_path'));
         $this->extend('updateCMSFields', $fields);
 
         return $fields;
@@ -140,13 +140,13 @@ class TeamMember extends DataObject implements PermissionProvider
 
     public function getDummyPortrait()
     {
-        $dummyName = $this->stat('dummy_image');
-        $uploadPath = $this->stat('upload_path');
+        $dummyName = $this->config()->get('dummy_image');
+        $uploadPath = $this->config()->get('upload_path');
 
         $dummyPic = Image::find(join('/', [$uploadPath, $dummyName]));
 
         if (!$dummyPic) {
-            $dummyPath = ModuleResourceLoader::singleton()->resolvePath($this->stat('default_dummy'));
+            $dummyPath = ModuleResourceLoader::singleton()->resolvePath($this->config()->get('default_dummy'));
 
             //create it
             $defaultDummy = join('/', [BASE_PATH, $dummyPath]);
@@ -194,7 +194,7 @@ class TeamMember extends DataObject implements PermissionProvider
      */
     public function canEdit($member = null)
     {
-        $member = $member ?: Member::currentUser();
+        $member = $member ?: Security::getCurrentUser();
         $parent = parent::canCreate($member);
 
         $manage = Permission::check('TEAM_MANAGE', 'any', $member);
