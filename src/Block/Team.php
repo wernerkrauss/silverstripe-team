@@ -42,7 +42,6 @@ class Team extends ElementContent
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function (FieldList $fields) {
-
             $fields->removeByName('TeamMember');
 
             if ($this->ID) {
@@ -65,17 +64,29 @@ class Team extends ElementContent
                 )->setConfig($gridConfig);
 
                 $fields->addFieldToTab('Root.Members', $grid);
-
             }
         });
 
         return parent::getCMSFields();
     }
 
-
     public function getType()
     {
         return _t(__CLASS__ . '.BlockType', 'Team Member');
     }
 
+    public function getSummary(): string
+    {
+        $members = $this->Members();
+        if ($members->count() === 0) {
+            return _t(__CLASS__ . 'NoTeamMembers', 'No team members');
+        }
+//        $summary = $members->count() . ' ' . _t(__CLASS__ . 'TeamMembers', 'Team Members') . ":\n\n";
+        $summary = '';
+        foreach ($members as $member) {
+            $summary .= '• ' . $member->Name . "\n\n";
+        }
+
+        return $summary;
+    }
 }
