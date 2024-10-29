@@ -22,10 +22,10 @@ de:
     db_Email: E-Mail
     db_FirstName: Vorname
     db_IsActive: Aktiv
-    __db_Position: Position
+    db_Position: Position
     db_SortOrder: Sortierung
     db_Surname: Nachname
-    __db_Tel: Tel
-    __db_URLSlug: URLSlug
-    __has_one_Portrait: Portrait
+    db_Tel: Tel
+    db_URLSlug: URLSlug
+    has_one_Portrait: Portrait
     has_one_TeamHolder: 'Team Seite'
