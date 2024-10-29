@@ -19,7 +19,7 @@
 		"issues": "https://github.com/wernerkrauss/silverstripe-team/issues"
 	},
 	"require": {
-		"silverstripe/recipe-cms": "^4",
+		"silverstripe/recipe-cms": "^4||^5",
 		"nightjar/ss-slug": "^2",
         "undefinedoffset/sortablegridfield": "^2"
 	},
