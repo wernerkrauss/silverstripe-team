@@ -10,6 +10,7 @@
 namespace Netwerkstatt\Team\Page;
 
 use Override;
+use SilverStripe\ORM\HasManyList;
 use Netwerkstatt\Team\Model\TeamMember;
 use Page;
 use SilverStripe\Forms\FieldList;
