@@ -10,6 +10,7 @@
 namespace Netwerkstatt\Team\Model;
 
 use SilverStripe\AssetAdmin\Forms\UploadField;
+use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use Override;
 use Netwerkstatt\Team\Page\TeamHolder;
@@ -280,7 +281,10 @@ class TeamMember extends DataObject implements PermissionProvider
     public function Link()
     {
         $teamHolder = $this->TeamHolder();
-        $link = ($teamHolder && $teamHolder->exists()) ? $teamHolder->Link() : '';
+        if (!$teamHolder || !$teamHolder->exists()) {
+            return '';
+        }
+        $link = Controller::join_links($teamHolder->Link(), $this->URLSlug);
 
         $this->extend('UpdateLink', $link);
 
