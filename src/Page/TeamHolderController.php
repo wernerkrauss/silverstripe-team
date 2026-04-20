@@ -39,13 +39,18 @@ class TeamHolderController extends PageController
      */
     public function show()
     {
+        $item = $this->getItem();
+        if (!$item) {
+            return $this->httpError(404);
+        }
+
         $templates = SSViewer::get_templates_by_class(static::class, '_show');
         $templates[] = 'Page';
 
         //use this if you need e.g. different template for ajax
         $this->extend('updateTemplatesForShowAction', $templates);
 
-        return $this->renderWith($templates);
+        return $this->customise($item)->renderWith($templates);
     }
 
     /**
@@ -54,7 +59,7 @@ class TeamHolderController extends PageController
      */
     public function getItems()
     {
-        $itemClass = $this->config()->get('item_class');
+        $itemClass = static::config()->get('item_class');
 
         $items = $itemClass::get();
 
@@ -75,7 +80,7 @@ class TeamHolderController extends PageController
     {
         $items = $this->getItems();
         $paginatedList = PaginatedList::create($items, $this->getRequest());
-        $paginatedList->setPageLength($this->config()->get('page_length'));
+        $paginatedList->setPageLength(static::config()->get('page_length'));
         $paginatedList->setLimitItems(true);
         return $paginatedList;
     }
