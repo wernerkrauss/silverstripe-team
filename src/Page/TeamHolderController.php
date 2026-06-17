@@ -31,6 +31,13 @@ class TeamHolderController extends PageController
 
     public function index()
     {
+        $templates = SSViewer::get_templates_by_class(static::class, '');
+        $this->extend('updateTemplatesForIndexAction', $templates);
+
+        if ($this->getRequest()->isAjax()) {
+            return $this->renderWith($templates);
+        }
+
         return $this;
     }
 
