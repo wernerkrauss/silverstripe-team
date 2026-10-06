@@ -47,7 +47,7 @@ class TeamHolder extends Page
      */
     private static $plural_name = 'Team Holder Pages';
 
-    private static $cms_icon = 'team/images/users.png';
+    private static $cms_icon_class = 'font-icon-torsos-all';
 
     /**
      * @return FieldList

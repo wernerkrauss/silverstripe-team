@@ -32,5 +32,5 @@ class TeamAdmin extends ModelAdmin
     /**
      * @config
      */
-    private static $menu_icon = 'team/images/users.png';
+    private static $menu_icon_class = 'font-icon-torsos-all';
 }
